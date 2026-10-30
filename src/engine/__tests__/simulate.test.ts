@@ -94,7 +94,7 @@ describe('simulateMatch', () => {
 
   it('a stronger team wins more often', () => {
     const strong = toMatchTeam(generateClub(cityA, 0));
-    strong.lineup = strong.lineup.map((p) => ({ ...p, attrs: Object.fromEntries(Object.entries(p.attrs).map(([k, v]) => [k, Math.min(99, v + 25)])) as typeof p.attrs }));
+    strong.lineup = strong.lineup.map((p) => ({ ...p, attrs: Object.fromEntries(Object.entries(p.attrs).map(([k, v]) => [k, Math.min(99, v + 25)])) as unknown as typeof p.attrs }));
     let wins = 0;
     for (let i = 0; i < 1000; i++) if (simulateMatch(i, away(), strong).score.away > simulateMatch(i, away(), strong).score.home) wins++;
     expect(wins / 1000).toBeGreaterThan(0.6);
