@@ -22,7 +22,7 @@ npm run build      # typecheck + build de produção em dist/
 npm run calibrate  # estatísticas de realismo em 10 mil partidas
 ```
 
-Parâmetros de URL: `?seed=qualquer-coisa` reproduz exatamente a mesma partida em qualquer aparelho.
+Parâmetros de URL: `#seed=qualquer-coisa` (ou `?seed=`) reproduz exatamente a mesma partida em qualquer aparelho.
 
 ## Organização
 

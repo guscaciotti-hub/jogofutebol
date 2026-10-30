@@ -14,6 +14,7 @@ import { Director } from './render/director';
 import { Hud } from './ui/hud';
 import { showStartCard } from './ui/start';
 import { createSfx, type Sfx } from './audio/sfx';
+import { goToSeed, readSeed, seedUrl } from './seed';
 
 /**
  * Phase 1 entry: NPC vs NPC friendly between two random Brazilian cities, chosen from the seed.
@@ -39,9 +40,14 @@ function randomSeed(): string {
 function boot() {
   const app = document.getElementById('app')!;
   const canvas = document.getElementById('view') as HTMLCanvasElement;
-  const params = new URLSearchParams(location.search);
-  const seed = params.get('seed') ?? randomSeed();
-  if (!params.get('seed')) history.replaceState(null, '', `?seed=${encodeURIComponent(seed)}`);
+  const seed = readSeed() ?? randomSeed();
+  if (!readSeed()) {
+    try {
+      history.replaceState(null, '', seedUrl(seed));
+    } catch {
+      /* some embedded viewers forbid history changes */
+    }
+  }
 
   const result = pickMatch(seed);
   const scene = createScene(canvas);
@@ -55,9 +61,7 @@ function boot() {
     },
     onSpeed: (s) => director?.setSpeed(s),
     onMute: (m) => sfx?.setMuted(m),
-    onNewMatch: () => {
-      location.href = `?seed=${encodeURIComponent(randomSeed())}`;
-    },
+    onNewMatch: () => goToSeed(randomSeed()),
     onTags: (v) => director?.setTagsVisible(v),
     onSeek: (t) => {
       director?.seek(t);

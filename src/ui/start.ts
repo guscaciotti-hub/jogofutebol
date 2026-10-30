@@ -1,6 +1,7 @@
 import type { MatchResult, Side } from '../engine/types';
 import { STYLE_LABEL } from '../engine/formations';
 import { crestDataUrl } from './crest';
+import { goToSeed } from '../seed';
 
 /** Pre-match card. The tap also unlocks audio on iOS. */
 export function showStartCard(parent: HTMLElement, result: MatchResult, seed: string, onStart: () => void): () => void {
@@ -25,11 +26,7 @@ export function showStartCard(parent: HTMLElement, result: MatchResult, seed: st
     onStart();
   });
   const input = overlay.querySelector<HTMLInputElement>('#seed-input')!;
-  const go = () => {
-    const url = new URL(location.href);
-    url.searchParams.set('seed', input.value.trim() || 'varzea');
-    location.href = url.toString();
-  };
+  const go = () => goToSeed(input.value.trim() || 'varzea');
   overlay.querySelector<HTMLButtonElement>('#seed-btn')!.addEventListener('click', go);
   input.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') go();
